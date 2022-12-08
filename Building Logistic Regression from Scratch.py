@@ -1,53 +1,66 @@
-#Importing the Dependencies 
-import numpy as np 
-
 class Logistic_Regression():
 
-  #Declaring the Learning rate and No. of Iterations(Hyperparameters)
-  def __init__(self, Learning_rate, No_of_Iterations):
-    self.Learning_rate = Learning_rate
-    self.No_of_Iterations = No_of_Iterations
 
-  # Fit function to train model with dataset
+  # declaring learning rate & number of iterations (Hyperparametes)
+  def __init__(self, learning_rate, no_of_iterations):
+
+    self.learning_rate = learning_rate
+    self.no_of_iterations = no_of_iterations
+
+
+
+  # fit function to train the model with dataset
   def fit(self, X, Y):
 
-    #No. of datapoints in the dataset(No. of Rows ) ==> m 
-    #No. of input features in the dataset(No. of Colomns) ==> n
+    # number of data points in the dataset (number of rows)  -->  m
+    # number of input features in the dataset (number of columns)  --> n
     self.m, self.n = X.shape
 
-    #Initiating the Weight and Bias Value 
-    self.w = np.zeros(self.n)
 
+    #initiating weight & bias value
+
+    self.w = np.zeros(self.n)
+    
     self.b = 0
 
-    self.X = X 
-    
+    self.X = X
+
     self.Y = Y
 
-    # Implementing Gradient Descent for Optimization
-    for i in range(self.No_of_Iterations):
-      self.Update_Weights()
 
-  def Update_Weights(self):
+    # implementing Gradient Descent for Optimization
 
-    #Y_cap Formula (Sigmoid Function)
+    for i in range(self.no_of_iterations):
+      self.update_weights()
 
-    Y_cap = 1/ (1 + np.exp( -(self.X.dot(self.w)+ self.b ) )) # wX + b 
 
-    #Derivatives 
 
-    dw = (1/self.m)*np.dot(self.X.T, (Y_cap - self.Y))
+  def update_weights(self):
 
-    db = (1/self.m)*np.sum(Y_cap - self.Y)
+    # Y_hat formula (sigmoid function)
 
-    #Updating the Weight and bias using Gradient Descent
-    self.w = self.w - Learning_rate * dw 
+    Y_hat = 1 / (1 + np.exp( - (self.X.dot(self.w) + self.b ) ))    
 
-    self.b = self.b - Learning_rate * db 
- 
 
+    # derivaties
+
+    dw = (1/self.m)*np.dot(self.X.T, (Y_hat - self.Y))
+
+    db = (1/self.m)*np.sum(Y_hat - self.Y)
+
+
+    # updating the weights & bias using gradient descent
+
+    self.w = self.w - self.learning_rate * dw
+
+    self.b = self.b - self.learning_rate * db
+
+
+  # Sigmoid Equation & Decision Boundary
 
   def predict(self, X):
-    Y_pred = 1/ (1 + np.exp( -(X.dot(self.w)+ self.b ) ))
+
+    Y_pred = 1 / (1 + np.exp( - (X.dot(self.w) + self.b ) )) 
     Y_pred = np.where( Y_pred > 0.5, 1, 0)
     return Y_pred
+     
